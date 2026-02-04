@@ -1,58 +1,119 @@
-<div align="center">
+<p align="center">
+  <img src="Assets/logo.png" alt="SwiftUI Forms Kit" width="200"/>
+</p>
 
-# 📋 SwiftUI-Forms-Kit
+<h1 align="center">SwiftUI Forms Kit</h1>
 
-**Advanced form builder for SwiftUI with validation & 30+ field types**
+<p align="center">
+  <strong>📋 Advanced form builder for SwiftUI with validation & 30+ field types</strong>
+</p>
 
-[![Swift](https://img.shields.io/badge/Swift-5.9+-F05138?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org)
-[![iOS](https://img.shields.io/badge/iOS-15.0+-000000?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/ios/)
-[![SPM](https://img.shields.io/badge/SPM-Compatible-FA7343?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-
-</div>
-
----
-
-## ✨ Features
-
-- 📋 **30+ Field Types** — Text, date, picker, slider, etc.
-- ✅ **Validation** — Built-in & custom rules
-- 🎨 **Customizable** — Full styling control
-- 📱 **Adaptive** — iOS, macOS, visionOS
-- 🔄 **Two-Way Binding** — Automatic state sync
+<p align="center">
+  <img src="https://img.shields.io/badge/Swift-6.0-orange.svg" alt="Swift"/>
+  <img src="https://img.shields.io/badge/iOS-17.0+-blue.svg" alt="iOS"/>
+</p>
 
 ---
 
-## 🚀 Quick Start
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| 📝 **30+ Fields** | Text, date, picker, slider... |
+| ✅ **Validation** | Built-in & custom rules |
+| 🎨 **Styling** | Customizable appearance |
+| ♿ **Accessible** | VoiceOver support |
+| 🌍 **i18n** | Localization ready |
+
+## Quick Start
 
 ```swift
 import SwiftUIFormsKit
 
 struct SignupForm: View {
-    @FormState var form = SignupModel()
+    @FormState var form = SignupFormData()
     
     var body: some View {
-        FormView {
-            TextField("Name", text: $form.name)
-                .validate(.required)
+        Form {
+            FormField("Name", $form.name)
+                .validation(.required, .minLength(2))
             
-            EmailField("Email", text: $form.email)
+            FormField("Email", $form.email)
+                .validation(.required, .email)
             
-            PasswordField("Password", text: $form.password)
-                .validate(.minLength(8))
+            FormField("Password", $form.password)
+                .validation(.required, .minLength(8))
+                .secure()
             
-            DatePicker("Birthday", selection: $form.birthday)
-            
-            SubmitButton("Sign Up") {
-                // Submit action
+            FormField("Birth Date", $form.birthDate)
+                .fieldType(.datePicker)
+                .validation(.required, .age(min: 18))
+        }
+        .onSubmit {
+            if form.isValid {
+                submit()
             }
         }
     }
 }
 ```
 
----
+## Field Types
 
-## 📄 License
+```swift
+// Text
+FormField("Name", $name)
+FormField("Bio", $bio).multiline()
+FormField("Password", $password).secure()
 
-MIT • [@muhittincamdali](https://github.com/muhittincamdali)
+// Numbers
+FormField("Age", $age).fieldType(.number)
+FormField("Price", $price).fieldType(.currency)
+
+// Selection
+FormField("Country", $country).fieldType(.picker(countries))
+FormField("Rating", $rating).fieldType(.slider(1...5))
+
+// Date & Time
+FormField("Date", $date).fieldType(.datePicker)
+FormField("Time", $time).fieldType(.timePicker)
+
+// Other
+FormField("Accept Terms", $accepted).fieldType(.toggle)
+FormField("Photo", $image).fieldType(.imagePicker)
+```
+
+## Validation
+
+```swift
+// Built-in rules
+.validation(.required)
+.validation(.email)
+.validation(.minLength(8))
+.validation(.maxLength(100))
+.validation(.pattern(/^\d{5}$/))
+
+// Custom rule
+.validation(.custom { value in
+    value.contains("@") ? nil : "Must contain @"
+})
+```
+
+## Styling
+
+```swift
+FormField("Name", $name)
+    .style(FormFieldStyle(
+        labelColor: .secondary,
+        borderColor: .blue,
+        cornerRadius: 12
+    ))
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+MIT License
