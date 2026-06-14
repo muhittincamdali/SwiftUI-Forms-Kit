@@ -6,6 +6,8 @@
 
 ---
 
+## 🚀 Killer Feature: Dynamic JSON Form Builder
+Drive your UI from the backend. The `DynamicFormBuilder` takes a standard JSON schema and instantly compiles it into a fully-functional, validated SwiftUI form without writing a single line of view code.
 > **🛡️ PART OF THE 2026 UNIFIED CORE**
 > This repository is a verified component of 'The Endless March' initiative. Purified for Swift 6, zero-dependency, and engineered for maximum hardware saturation.
 > 
